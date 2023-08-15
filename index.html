@@ -1,0 +1,73 @@
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body>
+    <header>
+      <a href="">
+        <h1>Super simple vanilla ui router</h1>
+      </a>
+    </header>
+    <nav>
+      <a href="apples" route>Apples</a>
+      <a href="oranges" route>Oranges</a>
+      <a href="https://developer.mozilla.org/">External link</a>
+    </nav>
+    <main id="outlet" aria-live="polite">
+      <!-- Content appears here -->
+    </main>
+
+    <template id="default">
+      <section>
+        <header><h2>Welcome</h2></header>
+        Choose a fruit
+      </section>
+    </template>
+    <template id="apples">
+      <section>
+        <header><h2>Apples</h2></header>
+        Apples are awesome
+        <a href="" route>Home</a>
+      </section>
+    </template>
+    <template id="oranges">
+      <section>
+        <header><h2>Oranges</h2></header>
+        Oranges are outstanding
+        <a href="" route>Home</a>
+      </section>
+    </template>
+    <script>
+      const defaultTitle = "Vanilla Routing";
+
+      const updateOutlet = (route) => {
+        const outlet = document.getElementById("outlet");
+        const defaultTemplate = document.querySelector("template#default");
+        const template = document.getElementById(route) || defaultTemplate;
+        const clone = template.content.cloneNode(true);
+        outlet.replaceChildren(clone);
+      };
+
+      const handleRouteChange = (route) => {
+        const url = `${window.location.origin}/#${route}`;
+        if (url !== window.location.href) {
+          window.history.pushState({}, route, url);
+        }
+
+        document.querySelector(
+          "title"
+        ).innerText = `${defaultTitle} - ${route}`;
+        updateOutlet(route);
+      };
+      const routeLinks = document.querySelectorAll("a[route]");
+      routeLinks.forEach((element) =>
+        element.addEventListener("click", (event) => {
+          event.preventDefault();
+          handleRouteChange(event.target.attributes.href?.value);
+        })
+      );
+
+      handleRouteChange(location.hash.replace("#", ""));
+    </script>
+  </body>
+</html>
