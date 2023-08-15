@@ -56,9 +56,9 @@
           window.history.pushState({}, route, url);
         }
 
-        document.querySelector(
-          "title"
-        ).innerText = `${defaultTitle} - ${route}`;
+        document.querySelector("title").innerText = [defaultTitle, route]
+          .filter((item) => !!item)
+          .join(" - ");
         updateOutlet(route);
       };
       const routeLinks = document.querySelectorAll("a[route]");
@@ -76,7 +76,7 @@
 
       window.addEventListener("load", ({ target }) => {
         const { location } = target;
-      handleRouteChange(location.hash.replace("#", ""));
+        handleRouteChange(location.hash.replace("#", ""));
       });
     </script>
   </body>
