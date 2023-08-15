@@ -69,6 +69,10 @@
         })
       );
 
+      window.addEventListener("popstate", ({ target }) => {
+        const { location } = target;
+        handleRouteChange(location.hash.replace("#", ""));
+      });
       handleRouteChange(location.hash.replace("#", ""));
     </script>
   </body>

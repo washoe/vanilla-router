@@ -14,6 +14,7 @@ I wanted to understand a bit more about ui routing, so am building one from scra
 - On startup we add a click handler. This prevents the default navigation behaviour and passes the `href` our route change handler.
 - The route is used to construct a hash url. If it is different to the previous one, add it to the history.
   - This prevents duplicate history entries.
+- When the user goes back to the previous route, the popstate event is fired and the content is updated accordingly.
 - The title is updated along with the route.
 - The outlet element is updated with the required html.
 - `[aria-live]` ensures the change in content is announced by screen reader.
