@@ -7,7 +7,7 @@
   <body>
     <header>
       <a href="">
-        <h1>Super simple vanilla ui router</h1>
+        <h1>Super(ish) simple vanilla ui router</h1>
       </a>
     </header>
     <nav>
@@ -47,12 +47,27 @@
         const defaultTemplate = document.querySelector("template#default");
         const template = document.getElementById(route) || defaultTemplate;
         const clone = template.content.cloneNode(true);
+        addRoutes(clone);
         outlet.replaceChildren(clone);
       };
 
+      const urlChanged = (url1, url2) => {
+        return url1.replace("#", "") !== url2.replace("#", "");
+      };
+
+      const addRoutes = (element) => {
+        const routeLinks = element.querySelectorAll("a[route]");
+        routeLinks.forEach((element) =>
+          element.addEventListener("click", (event) => {
+            event.preventDefault();
+            handleRouteChange(event.target.attributes.href?.value);
+          })
+        );
+      }
+
       const handleRouteChange = (route) => {
-        const url = `${window.location.origin}/#${route}`;
-        if (url !== window.location.href) {
+        const url = `${window.location.origin}/${route ? `#${route}` : ``}`;
+        if (urlChanged(url, window.location.href)) {
           window.history.pushState({}, route, url);
         }
 
@@ -61,13 +76,10 @@
           .join(" - ");
         updateOutlet(route);
       };
-      const routeLinks = document.querySelectorAll("a[route]");
-      routeLinks.forEach((element) =>
-        element.addEventListener("click", (event) => {
-          event.preventDefault();
-          handleRouteChange(event.target.attributes.href?.value);
-        })
-      );
+
+      const initialiseRouteLinks = () => {
+        addRoutes(document);
+      };
 
       window.addEventListener("popstate", ({ target }) => {
         const { location } = target;
@@ -76,6 +88,7 @@
 
       window.addEventListener("load", ({ target }) => {
         const { location } = target;
+        initialiseRouteLinks();
         handleRouteChange(location.hash.replace("#", ""));
       });
     </script>
