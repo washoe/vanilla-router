@@ -73,7 +73,11 @@
         const { location } = target;
         handleRouteChange(location.hash.replace("#", ""));
       });
+
+      window.addEventListener("load", ({ target }) => {
+        const { location } = target;
       handleRouteChange(location.hash.replace("#", ""));
+      });
     </script>
   </body>
 </html>
